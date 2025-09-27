@@ -4,7 +4,8 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js",
-    "dev": "node index.js"
+    "dev": "node index.js",
+    "socket": "node src/socket/client.js"
   },
   "keywords": [],
   "author": "",

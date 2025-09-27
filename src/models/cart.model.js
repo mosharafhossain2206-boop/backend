@@ -16,11 +16,12 @@ const cartSchema = new Schema(
         product: {
           type: Types.ObjectId,
           ref: "Product",
-          required: true,
+          default: null,
         },
         variant: {
           type: Types.ObjectId,
           ref: "Variant",
+          default: null,
         },
         quantity: {
           type: Number,
@@ -33,10 +34,10 @@ const cartSchema = new Schema(
           required: true,
           min: [0, "Price must be greater than 0"],
         },
-        total: {
+        totalPrice: {
           type: Number,
           required: true,
-          min: [0, "Total must be greater than 0"],
+          min: [0, "totalPrice must be greater than 0"],
         },
         size: {
           type: String,
@@ -53,16 +54,21 @@ const cartSchema = new Schema(
       ref: "Coupon",
       default: null,
     },
-    totalPrice: {
-      type: Number,
-      required: true,
-      default: 0,
-    },
-    discountPrice: {
+    grossTotalAmount: {
       type: Number,
       default: 0,
     },
-    afterApplyCouponPrice: {
+    totalQuantity: { type: Number, default: 0 },
+
+    finalAmount: {
+      type: Number,
+      default: 0,
+    },
+    discountType: {
+      type: String,
+      default: "N/A",
+    },
+    discountAmount: {
       type: Number,
       default: 0,
     },
