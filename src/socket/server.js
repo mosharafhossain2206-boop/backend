@@ -8,12 +8,16 @@ module.exports = {
   initSocket: (hostServer) => {
     io = new Server(hostServer, {
       cors: {
-        origin: "http://localhost:5173",
+        origin: "*",
       },
     });
     // connect socket
     io.on("connection", (socket) => {
-      console.log("Client server connect", socket.id);
+      console.log("Client server connect");
+      const userId = socket.handshake.query.userId;
+      if (userId) {
+        socket.join(userId);
+      }
     });
 
     io.on("disconnect", () => {
@@ -21,6 +25,7 @@ module.exports = {
     });
   },
   getIo: () => {
+    console.log("get io called" + io);
     if (!io) throw new customError("Socket.io not initialized!");
     return io;
   },

@@ -96,6 +96,10 @@ const variantSchema = new mongoose.Schema(
       default: true,
     },
     image: [{}],
+    totalSales: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamps: true }
 );

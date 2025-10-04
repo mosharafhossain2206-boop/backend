@@ -170,6 +170,10 @@ const productSchema = new mongoose.Schema(
       type: String,
       enum: ["multiple", "single"],
     },
+    totalSales: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamps: true }
 );
