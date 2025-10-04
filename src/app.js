@@ -28,7 +28,7 @@ app.use(
 );
 
 // route
-app.use("/api/v1", require("./routes/index.api"));
+app.use(process.env.BASE_API || "/api/v1", require("./routes/index.api"));
 
 const io = initSocket(server);
 

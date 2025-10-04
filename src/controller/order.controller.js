@@ -10,6 +10,11 @@ const variantModel = require("../models/variant.model");
 const invoiceModel = require("../models/invoice.model");
 const crypto = require("crypto");
 const { log } = require("console");
+const SSLCommerzPayment = require("sslcommerz-lts");
+
+const store_id = "<your_store_id>";
+const store_passwd = "<your_store_password>";
+const is_live = process.env.NODE_ENV == "developement" ? false : true;
 
 // apply deliveryCharge method
 const applyDeliveryCharge = async (dcId) => {
@@ -104,7 +109,40 @@ exports.createOrder = asyncHandler(async (req, res) => {
       order.orderStatus = "Pending";
       order.invoice = invoice.invoiceId;
     } else {
-      
+      const data = {
+        total_amount: order.finalAmount,
+        currency: "BDT",
+        tran_id: transactionId,
+        success_url: `${process.env.BACKEND_URL}${process.env.BASE_API}/payment/success`,
+        fail_url: `${process.env.BACKEND_URL}${process.env.BASE_API}/payment/fail`,
+        cancel_url: `${process.env.BACKEND_URL}${process.env.BASE_API}/payment/cancel`,
+        ipn_url: `${process.env.BACKEND_URL}${process.env.BASE_API}/payment/ipn`,
+        // shipping_method: "Courier",
+        product_name: "Computer.",
+        product_category: "Electronic",
+        product_profile: "general",
+        cus_name: "Customer Name",
+        cus_email: "customer@example.com",
+        cus_add1: "Dhaka",
+        cus_city: "Dhaka",
+        cus_postcode: "1000",
+        cus_country: "Bangladesh",
+        cus_phone: "01711111111",
+
+        // ship_name: "Customer Name",
+        // ship_add1: "Dhaka",
+        // ship_add2: "Dhaka",
+        // ship_city: "Dhaka",
+        // ship_state: "Dhaka",
+        // ship_postcode: 1000,
+        // ship_country: "Bangladesh",
+      };
+
+      const sslcz = new SSLCommerzPayment(store_id, store_passwd, is_live);
+      const response = await sslcz.init(data);
+      console.log(response.GatewayPageURL);
     }
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 });
