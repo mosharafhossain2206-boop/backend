@@ -74,7 +74,10 @@ const orderSchema = new mongoose.Schema(
       enum: ["Pending", "success", "failed", "cancelled"],
       default: "Pending",
     },
-
+    payementInfo: {
+      type: mongoose.Schema.Types.Mixed,
+      default: {},
+    },
     // SSLCommerz Payment Gateway Specific
     transactionId: {
       type: String, // sslcommerz transaction_id

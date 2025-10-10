@@ -297,3 +297,163 @@ exports.resetPasswordTemplate = (name, resetLink) => {
     .replace("{{resetLink}}", resetLink)
     .replace(/{{companyName}}/g, "MernCyclon");
 };
+
+// order Template
+exports.orderTemplate = (cart, shippingInfo, finalAmount) => {
+  console.log(cart.items);
+  return `<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Order Summary</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #f6f9fc;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      .email-container {
+        max-width: 640px;
+        margin: 0 auto;
+        background-color: #ffffff;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      }
+
+      .header {
+        background-color: #007BFF;
+        color: #ffffff;
+        padding: 30px;
+        text-align: center;
+      }
+
+      .header h1 {
+        margin: 0;
+        font-size: 26px;
+      }
+
+      .header img {
+        max-width: 120px;
+        margin-bottom: 10px;
+      }
+
+      .content {
+        padding: 25px 30px;
+      }
+
+      .content p {
+        font-size: 16px;
+        line-height: 1.5;
+        color: #333333;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+
+      th, td {
+        padding: 14px 12px;
+        text-align: left;
+        font-size: 15px;
+      }
+
+      thead {
+        background-color: #f0f4f8;
+        border-bottom: 2px solid #e0e6ed;
+      }
+
+      tbody tr:nth-child(even) {
+        background-color: #f9fbfd;
+      }
+
+      tbody tr:last-child {
+        font-weight: bold;
+        border-top: 2px solid #e0e6ed;
+      }
+
+      .footer {
+        background-color: #f0f4f8;
+        text-align: center;
+        padding: 20px;
+        font-size: 13px;
+        color: #7a7a7a;
+      }
+
+      @media only screen and (max-width: 640px) {
+        .email-container {
+          width: 100% !important;
+          border-radius: 0 !important;
+        }
+
+        .content {
+          padding: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="email-container">
+      <!-- Header -->
+      <div class="header">
+        <!-- Optional Logo -->
+        <!-- <img src="https://yourdomain.com/logo.png" alt="Company Logo" /> -->
+        <h1>Your Order Summary</h1>
+      </div>
+
+      <!-- Content -->
+      <div class="content">
+        <p>Hi ${shippingInfo.fullName},</p>
+        <p>Thanks for shopping with us! Here's a summary of your order:</p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Product Name</th>
+              <th>Quantity</th>
+              <th>Total Price</th>
+            </tr>
+          </thead>
+          <tbody>
+          ${cart.items.map((item) => {
+            return `<tr>
+              <td>${
+                item.product ? item.product.name : item.variant.variantName
+              }</td>
+              <td>${item.quantity}</td>
+              <td>${item.totalPrice}</td>
+            </tr>`;
+          })}
+       
+            <tr>
+              <td colspan="2">Total</td>
+              <td>${finalAmount}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Footer -->
+      <div class="footer">
+        &copy; 2025 Your Company, Inc. <br />
+        123 Business Rd, Business City, BC 12345
+      </div>
+    </div>
+  </body>
+</html>
+`;
+};
+
+// sms template
+exports.phoneTemplate = () => {
+  return `📦 Order Confirmation
+Hello [Customer Name],
+Thank you for your order! Here are your order details:
+- [Your Company Name]
+`;
+};
