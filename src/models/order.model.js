@@ -88,15 +88,10 @@ const orderSchema = new mongoose.Schema(
       default: null,
     },
 
-    paymentGatewayData: {
-      type: mongoose.Schema.Types.Mixed, // store full SSLCommerz response if needed
-      default: {},
-    },
-
     // ORDER STATUS
     orderStatus: {
       type: String,
-      enum: ["Pending", "Hold", "Confirmed", "Packaging"],
+      enum: ["Pending", "Hold", "Confirmed", "Packaging", "Cancle"],
       default: "Pending",
     },
 
