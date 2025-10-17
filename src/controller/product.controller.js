@@ -7,6 +7,7 @@ const {
   deleteClodinaryFile,
 } = require("../helpers/cloudinary");
 const productModel = require("../models/product.model");
+const variantModel = require("../models/variant.model");
 const { generateQrCode, generateBarCode } = require("../helpers/QrCode");
 
 // create a new product
@@ -190,4 +191,30 @@ exports.productspagination = asyncHandler(async (req, res) => {
     totalitems,
     tatalPage,
   });
+});
+
+// get best selling
+exports.bestselling = asyncHandler(async (req, res) => {
+  const sellingProdut = await productModel.aggregate([
+    {
+      $match: {
+        totalSales: { $gt: 10 },
+      },
+    },
+  ]);
+  const sellingvariant = await variantModel.aggregate([
+    {
+      $match: {
+        totalSales: { $gt: 10 },
+      },
+    },
+  ]);
+
+  const allBestSellingProduct = [...sellingProdut, ...sellingvariant];
+  apiResponse.sendSucess(
+    res,
+    200,
+    "get all best selling produt",
+    allBestSellingProduct
+  );
 });

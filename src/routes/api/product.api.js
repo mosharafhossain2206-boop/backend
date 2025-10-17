@@ -17,4 +17,5 @@ _.route("/update-product-image/:slug").put(
 _.route("/search-product").get(productController.getProducts);
 _.route("/price-filter").get(productController.priceFilterProducts);
 _.route("/product-pagination").get(productController.productspagination);
+_.route("/bestSelling-product").get(productController.bestselling);
 module.exports = _;
