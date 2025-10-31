@@ -38,7 +38,7 @@ exports.getAllBrands = asyncHandler(async (req, res) => {
     const brands = await brandModel.find().sort({ createdAt: -1 });
     myCache.set("brands", JSON.stringify(brands), 1000);
     if (!brands || brands.length === 0) {
-      throw new customError(404, "No brands found");
+      throw new customError(401, "No brands found");
     }
     apiResponse.sendSucess(res, 200, "Brands fetched successfully", brands);
   }

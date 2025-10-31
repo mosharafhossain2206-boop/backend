@@ -23,10 +23,7 @@ const userSchema = new Schema({
     trim: true,
     required: true,
   },
-  image: {
-    type: String,
-    trim: true,
-  },
+  image: {},
   isEmailVerified: Boolean,
   isPhoneVerified: Boolean,
   address: {
@@ -72,21 +69,32 @@ const userSchema = new Schema({
   newsLetterSubscribe: Boolean,
   role: [
     {
-      type: Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "Role",
     },
   ],
   permission: [
     {
-      type: Types.ObjectId,
-      ref: "Permission",
+      permissionId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Permission",
+      },
+      actions: [
+        {
+          type: String,
+          trim: true,
+          enum: ["add", "view", "edit", "delete"],
+        },
+      ],
     },
   ],
+
   resetPasswordOtp: Number,
   resetPasswordExpires: Date,
   twoFactorEnabled: Boolean,
   isBlocked: Boolean,
   isActive: Boolean,
+
   refreshToken: {
     type: String,
     trim: true,

@@ -1,5 +1,6 @@
 const express = require("express");
 const _ = express.Router();
+
 _.use("/auth", require("./api/user.api"));
 _.use("/category", require("./api/category.api"));
 _.use("/subcategory", require("./api/subcategory.api"));
@@ -13,5 +14,8 @@ _.use("/cart", require("./api/cart.api"));
 _.use("/deliverycharge", require("./api/deliveryCharge.api"));
 _.use("/order", require("./api/order.api"));
 _.use("/payment", require("./api/payment.api"));
+_.use("/user", require("./api/adduser.api"));
+_.use("/permission", require("./api/adduserPermission.api."));
+_.use("/banner", require("./api/banner.api"));
 
 module.exports = _;

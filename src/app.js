@@ -7,6 +7,7 @@ const morgan = require("morgan");
 const http = require("http");
 const { globalErrorHanlder } = require("./helpers/globalErrorHandler");
 const { initSocket } = require("./socket/server");
+
 /**
  * all global middleware
  */

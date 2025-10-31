@@ -5,7 +5,9 @@
   "scripts": {
     "start": "nodemon index.js",
     "dev": "node index.js",
-    "socket": "node src/socket/client.js"
+    "socket": "node src/socket/client.js",
+    "seed:role":"node src/seeder/role.js",
+    "seed:permission":"node src/seeder/permisson.js"
   },
   "keywords": [],
   "author": "",

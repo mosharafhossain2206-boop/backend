@@ -1,0 +1,12 @@
+| Status Code                    | Meaning              | When to Use                                                                       |
+| ------------------------------ | -------------------- | --------------------------------------------------------------------------------- |
+| **200 OK**                     | ✅ Success            | The banner was created successfully (if you return success message).              |
+| **201 Created**                | 🆕 Resource Created  | Best practice — use this when a new banner is created and stored in the database. |
+| **400 Bad Request**            | ⚠️ Invalid Input     | When the request body is missing required fields or contains invalid data.        |
+| **401 Unauthorized**           | 🔒 Auth Error        | When the user is not logged in or the token is invalid.                           |
+| **403 Forbidden**              | 🚫 Permission Denied | When the user doesn’t have permission to create a banner.                         |
+| **404 Not Found**              | ❓ Resource Missing   | When a referenced entity (like target product/category/brand) does not exist.     |
+| **409 Conflict**               | ⚔️ Duplicate Entry   | When a banner with the same slug or title already exists.                         |
+| **413 Payload Too Large**      | 🖼️ Image Too Big    | When the uploaded file exceeds 2MB.                                               |
+| **415 Unsupported Media Type** | 🧩 Wrong File Type   | When the uploaded image format isn’t allowed (not jpg/jpeg/png/webp).             |
+| **500 Internal Server Error**  | 💥 Server Crash      | When something unexpected happens (DB error, unhandled exception, etc.).          |
