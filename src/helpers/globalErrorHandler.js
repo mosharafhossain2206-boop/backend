@@ -20,6 +20,7 @@ const productionError = (error, res) => {
   } else {
     return res.status(500).json({
       message: "Server Failed Try Again!",
+      status: error.status,
     });
   }
 };

@@ -15,6 +15,7 @@ const userValidationSchema = Joi.object(
       .pattern(
         /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/
       )
+      .allow("", null)
       .messages({
         "string.email": "Your Email must be String",
         "string.pattern.base": "Your email not match or email is invalid",
@@ -23,6 +24,7 @@ const userValidationSchema = Joi.object(
     phone: Joi.string()
       .trim()
       .empty()
+      .allow("", null)
       .pattern(/^(?:\+88|88)?01[3-9]\d{8}$/)
       .messages({
         "string.base": "Phone number must be a number",

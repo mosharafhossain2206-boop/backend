@@ -5,7 +5,7 @@ const bannerController = require("../../controller/banner.controller");
 const { authguard } = require("../../middleware/auth.middleware");
 const { authorize } = require("../../middleware/authorize.middle");
 _.route("/create-banner").post(
-  //   authguard,
+  authguard,
   //   authorize("brand", "add"),
   upload.fields([{ name: "image", maxCount: 1 }]),
   bannerController.createBanner

@@ -1,3 +1,4 @@
+require("dotenv").config();
 const { customError } = require("../helpers/customError");
 const User = require("../models/user.model");
 const jwt = require("jsonwebtoken");
@@ -24,7 +25,6 @@ exports.registration = asyncHandler(async (req, res) => {
   const otp = crypto.randomInt(1000, 9999);
   const expireTime = Date.now() + 10 * 60 * 1000;
 
-
   if (value.email) {
     const flink = `www.mern.com/verify/:${userData.email}`;
     // verification email
@@ -34,19 +34,19 @@ exports.registration = asyncHandler(async (req, res) => {
       expireTime,
       flink
     );
-    await mailer(template, userData.email);
+    // await mailer(template, userData.email);
     userData.resetPasswordOtp = otp;
     userData.resetPasswordExpires = expireTime;
   }
 
-  if(value.phone) {
-  const flink = `www.mern.com/verify/:${userData.phone}`;
-  const smsBody = `Your OTP for registration is ${otp}. It will expire in ${expireTime} minutes. Complete your registration here: ${flink}`
-  await sendSms(userData.phone ,smsBody)
-  }
+  // if (value.phone) {
+  //   const flink = `www.mern.com/verify/:${userData.phone}`;
+  //   const smsBody = `Your OTP for registration is ${otp}. It will expire in ${expireTime} minutes. Complete your registration here: ${flink}`;
+  //   await sendSms(userData.phone, smsBody);
+  // }
 
   await userData.save();
-  apiResponse.sendSucess(res,201 , "Registration Succesfull"  ,userData)
+  apiResponse.sendSucess(res, 201, "Registration Succesfull", userData);
 });
 
 // verify email
@@ -58,7 +58,7 @@ exports.verifyEmail = asyncHandler(async (req, res) => {
   // find the user using email
   const findUser = await User.findOne({
     $and: [
-      { $or: [{phone: req.body.phone} , {email: email }]},
+      { $or: [{ phone: req.body.phone }, { email: email }] },
       { resetPasswordOtp: opt },
       { resetPasswordExpires: { $gt: Date.now() } },
     ],
@@ -166,7 +166,9 @@ exports.resetPassword = asyncHandler(async (req, res) => {
 exports.login = asyncHandler(async (req, res) => {
   const { email, password, phone } = await validateUser(req);
 
-  const findUser = await User.findOne({ email, phone });
+  const findUser = await User.findOne({
+    $or: [{ phone: phone }, { email: email }],
+  });
   if (!findUser) {
     throw new customError(401, "User not Found !!");
   }
@@ -185,10 +187,9 @@ exports.login = asyncHandler(async (req, res) => {
   // send refreshToken into cookies
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true, // Prevents JS access (security)
-    secure: process.env.NODE_ENV == "developement" ? false : true, // Sends cookie only over HTTPS
-    sameSite: "none", // CSRF protection
+    secure: process.env.NODE_ENV == "developement" ? false : true,
+    sameSite: process.env.NODE_ENV === "developement" ? "lax" : "none",
     path: "/",
-    maxAge: 15 * 24 * 60 * 60 * 1000, // 7 days in milliseconds
   });
   // set refreshToken inot db
   findUser.refreshToken = refreshToken;
@@ -229,4 +230,27 @@ exports.logout = asyncHandler(async (req, res) => {
   }
   //  return res.status(301).redirect('www.frn.com/logout')
   apiResponse.sendSucess(res, 200, "logout Sucessfull", client);
+});
+
+// get Acccestoken via refreshToken
+exports.getToken = asyncHandler(async (req, res) => {
+  const cookies = req?.headers.cookie;
+  if (!cookies) {
+    throw new customError(401, "Refresh Token Missing");
+  }
+  const { refreshToken } = Object.fromEntries(
+    cookies.split("; ").map((part) => {
+      const [key, ...val] = part.split("=");
+      return [key, val.join("=")];
+    })
+  );
+  const decode = jwt.verify(refreshToken, process.env.REFRESHTOKEN_SECRECT);
+  if (!decode) throw new customError(401, " unauthorized access !");
+  // find the user
+  const user = await User.findById(decode.id);
+  if (!user) throw new customError(401, " unauthorized access !");
+  const accesToken = await user.generateAccesToken();
+  apiResponse.sendSucess(res, 200, "New AccesToken Generated", {
+    accesToken,
+  });
 });
