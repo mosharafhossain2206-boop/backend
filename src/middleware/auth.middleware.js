@@ -7,10 +7,9 @@ const authguard = async (req, res, next) => {
   const accesToken =
     req?.headers?.authorization?.replace("Bearer ", "") ||
     req?.body?.accesToken;
-  const refreshToken = req?.headers?.cookie?.replace("refreshToken=", "");
 
   const decode = jwt.verify(accesToken, process.env.ACCESTOKEN_SECRECT);
-  if (decode) throw new customError(401, " unauthorized access !");
+  if (!decode) throw new customError(401, "unauthorized access !");
   const user = await userModel
     .findById(decode.id)
     .populate("role")

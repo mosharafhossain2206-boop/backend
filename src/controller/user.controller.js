@@ -187,9 +187,9 @@ exports.login = asyncHandler(async (req, res) => {
   // send refreshToken into cookies
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true, // Prevents JS access (security)
-    secure: process.env.NODE_ENV == "developement" ? false : true,
-    sameSite: process.env.NODE_ENV === "developement" ? "lax" : "none",
-    path: "/",
+    secure: process.env.NODE_ENV === "production", // Use HTTPS in production
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    path: "/", // ✅ Important: Cookie available on all paths
   });
   // set refreshToken inot db
   findUser.refreshToken = refreshToken;
@@ -234,17 +234,13 @@ exports.logout = asyncHandler(async (req, res) => {
 
 // get Acccestoken via refreshToken
 exports.getToken = asyncHandler(async (req, res) => {
-  const cookies = req?.headers.cookie;
+  const cookies = req.cookies.refreshToken;
   if (!cookies) {
     throw new customError(401, "Refresh Token Missing");
   }
-  const { refreshToken } = Object.fromEntries(
-    cookies.split("; ").map((part) => {
-      const [key, ...val] = part.split("=");
-      return [key, val.join("=")];
-    })
-  );
-  const decode = jwt.verify(refreshToken, process.env.REFRESHTOKEN_SECRECT);
+
+  const decode = jwt.verify(cookies, process.env.REFRESHTOKEN_SECRECT);
+
   if (!decode) throw new customError(401, " unauthorized access !");
   // find the user
   const user = await User.findById(decode.id);

@@ -8,7 +8,8 @@ module.exports = {
   initSocket: (hostServer) => {
     io = new Server(hostServer, {
       cors: {
-        origin: "*",
+        origin: "http://localhost:5173",
+        credentials: true,
       },
     });
     // connect socket
