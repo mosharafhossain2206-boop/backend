@@ -1,7 +1,6 @@
 const jwt = require("jsonwebtoken");
 const userModel = require("../models/user.model");
 const { customError } = require("../helpers/customError");
-const { asyhandler } = require("../utils/asyncHandler");
 
 const authguard = async (req, res, next) => {
   const accesToken =
@@ -9,6 +8,7 @@ const authguard = async (req, res, next) => {
     req?.body?.accesToken;
 
   const decode = jwt.verify(accesToken, process.env.ACCESTOKEN_SECRECT);
+
   if (!decode) throw new customError(401, "unauthorized access !");
   const user = await userModel
     .findById(decode.id)

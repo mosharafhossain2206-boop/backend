@@ -33,7 +33,14 @@ exports.createBanner = asyncHandler(async (req, res) => {
 
 // get banner
 exports.getBanner = asyncHandler(async (req, res) => {
-  const banner = await bannerModel.find();
+  const { slug } = req.query;
+  let findQuery = {};
+  if (slug) {
+    findQuery.slug = slug;
+  } else {
+    findQuery = {};
+  }
+  const banner = await bannerModel.find(findQuery);
   if (!banner) throw new customError(500, "Banner Not found");
   apiResponse.sendSucess(res, 200, "Banner found sucesssfully", banner);
 });
