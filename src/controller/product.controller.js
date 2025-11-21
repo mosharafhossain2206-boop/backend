@@ -14,6 +14,7 @@ const { generateQrCode, generateBarCode } = require("../helpers/QrCode");
 exports.createProduct = asyncHandler(async (req, res) => {
   // validate product information
   const data = await validateProduct(req);
+
   const allImageInfo = [];
   //   upload images into cloudinary
   for (const image of data.image) {

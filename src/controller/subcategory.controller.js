@@ -23,7 +23,9 @@ exports.createSubCategory = asyncHandler(async (req, res) => {
 
 // get all subcategory
 exports.getAllSubCategory = asyncHandler(async (req, res) => {
-  const allSubCategory = await subCategoryModel.find();
+  const allSubCategory = await subCategoryModel
+    .find()
+    .populate("category discount");
   if (!allSubCategory) throw new customError(401, "allSubCategory not Found!!");
   apiResponse.sendSucess(
     res,

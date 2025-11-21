@@ -12,14 +12,14 @@ _.route("/create-banner").post(
 );
 
 _.route("/get-banner").get(bannerController.getBanner);
-_.route("/update-banner/:bannerId").post(
+_.route("/update-banner/:bannerId").put(
   //   authguard,
   //   authorize("brand", "add"),
   upload.fields([{ name: "image", maxCount: 1 }]),
   bannerController.updateBanner
 );
 
-_.route("/delete-banner/:bannerId").post(
+_.route("/delete-banner/:bannerId").delete(
   //   authguard,
   //   authorize("brand", "add"),
   bannerController.deleteBanner

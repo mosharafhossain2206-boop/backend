@@ -5,8 +5,8 @@ const { upload } = require("../../middleware/multer.middleware");
 const { authguard } = require("../../middleware/auth.middleware");
 const { authorize } = require("../../middleware/authorize.middle");
 _.route("/create-category").post(
-  authguard,
-  authorize("category", "add"),
+  // authguard,
+  // authorize("category", "add"),
   upload.fields([{ name: "image", maxCount: 1 }]),
   categoryController.createCategory
 );

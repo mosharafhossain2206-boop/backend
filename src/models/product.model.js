@@ -80,12 +80,14 @@ const productSchema = new mongoose.Schema(
       default: 0,
     },
     warrantyInformation: {
-      type: mongoose.Types.ObjectId,
-      ref: "Warranty",
+      // type: mongoose.Types.ObjectId,
+      // ref: "Warranty",
+      type: String,
     },
     shippingInformation: {
-      type: mongoose.Types.ObjectId,
-      ref: "ShippingInfo",
+      // type: mongoose.Types.ObjectId,
+      // ref: "ShippingInfo",
+      type: String,
     },
     variant: [
       {
@@ -136,8 +138,9 @@ const productSchema = new mongoose.Schema(
       default: 0,
     },
     warehouseLocation: {
-      type: mongoose.Types.ObjectId,
-      ref: "Warehouse",
+      // type: mongoose.Types.ObjectId,
+      // ref: "Warehouse",
+      type: String,
     },
     purchasePrice: {
       type: Number,
